@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # package
+    'rest_framework',
+    'drf_yasg',
     # local app
     'warehouse',
     'shared',
@@ -71,6 +73,11 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
+
+
 
 WSGI_APPLICATION = 'warehouse_project.wsgi.application'
 
