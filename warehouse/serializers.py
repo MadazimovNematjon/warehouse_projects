@@ -3,8 +3,6 @@ from rest_framework import serializers
 from warehouse.models import ProductModel, MaterialModel, ProductMaterialModel, WarehouseModel
 
 
-
-
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialModel
@@ -14,16 +12,26 @@ class MaterialSerializer(serializers.ModelSerializer):
 
 
 class ProductMaterialSerializer(serializers.ModelSerializer):
-    warehouse_id = serializers.IntegerField(source='warehouse.warehouse_id', default=None)
+    warehouse_id = serializers.SerializerMethodField('get_warehouse_id')
     material_name = serializers.CharField(source='material_id.material_name')
     qty = serializers.IntegerField(source='quantity')
-    price = serializers.FloatField(source='material_id.price', default=None)
+    price = serializers.SerializerMethodField('get_price')
 
     class Meta:
         model = ProductMaterialModel
         fields = ['warehouse_id', 'material_name', 'qty', 'price']
 
+    # Get the warehouse_id based on the material
+    @staticmethod
+    def get_warehouse_id(obj):
+        warehouse = WarehouseModel.objects.filter(material_id=obj.material_id).first()
+        return warehouse.id if warehouse else None
 
+    # Get the price based on the material
+    @staticmethod
+    def get_price(obj):
+        warehouse = WarehouseModel.objects.filter(material_id=obj.material_id).first()
+        return warehouse.price if warehouse else None
 
 
 class WarehouseSerializer(serializers.ModelSerializer):
@@ -37,7 +45,7 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    product_materials = ProductMaterialSerializer(many=True,)
+    product_materials = ProductMaterialSerializer(many=True, )
     product_qty = serializers.SerializerMethodField('get_product_qty')
 
     class Meta:
