@@ -52,7 +52,7 @@ class ProductMaterialModel(BaseModel):
 
 class WarehouseModel(BaseModel):
     id = models.AutoField(primary_key=True, unique=True, editable=False,)
-    material_id = models.ForeignKey(to=MaterialModel, related_name='warehouses', on_delete=models.CASCADE)
+    material_id = models.ForeignKey(MaterialModel, related_name='warehouses', on_delete=models.CASCADE)
     remainder = models.PositiveIntegerField()  # Omborda qolgan miqdor
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
