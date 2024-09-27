@@ -26,14 +26,17 @@ class MaterialAdmin(admin.ModelAdmin):
 
     )
 
+
 class ProductMaterialAdmin(admin.ModelAdmin):
     list_display = (
         'product_id',
         'material_id',
         'quantity'
     )
-
-
+    list_filter = (
+        'material_id',
+        'quantity'
+    )
 
 
 admin.site.register(WarehouseModel, WarehouseAdmin)
